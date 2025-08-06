@@ -13,6 +13,17 @@ AppState :: struct {
 		output: [dynamic]u8,
 }
 
+dump_table :: proc(table: ^janet.JanetTable) {
+        for i := 0; i32(i) < table.count; i = i + 1 {
+                if table.data[i].key.type == .NIL do continue
+                env_buf := janet.pretty(nil, 3, 0, table.data[i].key)
+                fmt.println(string(janet.janet_buf_to_slice(env_buf)))
+                env_buf2 := janet.pretty(nil, 3, 0, table.data[i].value)
+                fmt.println(string(janet.janet_buf_to_slice(env_buf2)))
+                i = i + 1
+        }
+}
+
 main :: proc() {
 		janet.init()
 		defer janet.deinit()
@@ -28,6 +39,7 @@ main :: proc() {
                 value := new(janet.Janet)
                 res := janet.dostring(env, input, "main", value)
                 buf := janet.pretty(nil, 3, 0, value^)
+                dump_table(env)
 				append(output, string(janet.janet_buf_to_slice(buf)))
 		}
 
