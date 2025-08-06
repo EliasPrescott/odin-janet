@@ -112,6 +112,5 @@ foreign janet {
 }
 
 janet_buf_to_slice :: proc(buffer: ^JanetBuffer) -> []u8 {
-		fmt.println(buffer)
 		return slice.bytes_from_ptr(buffer.data, int(buffer.count))
 }
